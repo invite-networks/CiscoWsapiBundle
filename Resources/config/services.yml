@@ -11,17 +11,16 @@ services:
     cisco_wsapi.xcdr_client:
         class:        "%cisco_wsapi.xcdr_client.class%"
         arguments:
-           options: {
-              protocol: "%cisco_wsapi.xcdr.protocol%",
-              app_name: "%cisco_wsapi.xcdr.app_name%",
-              app_host: "%cisco_wsapi.app_host%",
-              app_protocol: "%cisco_wsapi.app_protocol%",
-              connection: "%cisco_wsapi.soap.connection_timeout%",
-              trace: "%cisco_wsapi.soap.trace%",
-              exception: "%cisco_wsapi.soap.exception%",
-              socket: "%cisco_wsapi.soap.socket_timeout%",
+           options:
+              protocol: "%cisco_wsapi.xcdr.protocol%"
+              app_name: "%cisco_wsapi.xcdr.app_name%"
+              app_host: "%cisco_wsapi.app_host%"
+              app_protocol: "%cisco_wsapi.app_protocol%"
+              connection: "%cisco_wsapi.soap.connection_timeout%"
+              trace: "%cisco_wsapi.soap.trace%"
+              exception: "%cisco_wsapi.soap.exception%"
+              socket: "%cisco_wsapi.soap.socket_timeout%"
               cdr_format: "%cisco_wsapi.xcdr.cdr_format%"
-          }
           
     cisco_wsapi.xcdr_listener:
         class:        "%cisco_wsapi.xcdr_listener.class%"
