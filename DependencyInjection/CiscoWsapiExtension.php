@@ -41,9 +41,7 @@ class CiscoWsapiExtension extends Extension
         $container->setParameter('cisco_wsapi.xcc.app_name', $config['app']['xcc_name']);
         $container->setParameter('cisco_wsapi.xsvc.app_name', $config['app']['xsvc_name']);
         $container->setParameter('cisco_wsapi.xcdr.app_name', $config['app']['xcdr_name']);
-        $container->setParameter('cisco_wsapi.xcc.protocol', $config['providers']['xcc_protocol']);
-        $container->setParameter('cisco_wsapi.xsvc.protocol', $config['providers']['xsvc_protocol']);
-        $container->setParameter('cisco_wsapi.xcdr.protocol', $config['providers']['xcdr_protocol']);
+        $container->setParameter('cisco_wsapi.protocol', $config['providers']['protocol']);
         $container->setParameter('cisco_wsapi.xcdr.cdr_format', $config['providers']['xcdr_cdr_format']);
         $container->setParameter('cisco_wsapi.soap.exception', $config['soap']['exception']);
         $container->setParameter('cisco_wsapi.soap.trace', $config['soap']['trace']);

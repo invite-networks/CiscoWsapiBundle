@@ -12,7 +12,7 @@ services:
         class:        "%cisco_wsapi.xcdr_client.class%"
         arguments:
            options:
-              protocol: "%cisco_wsapi.xcdr.protocol%"
+              protocol: "%cisco_wsapi.protocol%"
               app_name: "%cisco_wsapi.xcdr.app_name%"
               app_host: "%cisco_wsapi.app_host%"
               app_protocol: "%cisco_wsapi.app_protocol%"
