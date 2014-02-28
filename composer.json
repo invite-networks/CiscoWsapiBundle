@@ -1,0 +1,23 @@
+{
+    "name": "invite/cisco-wsapi-bundle",
+    "type": "symfony-bundle",
+    "description": "Symfony2 bundle for Cisco Systems IOS UC Gateway API",
+    "keywords": ["cisco", "voip", "wsapi", "ios"],
+    "homepage": "https://github.com/invite-networks/cisco-wsapi-bundle",
+    "license": "MIT",
+    "authors": [
+	{
+	    "name": "Josh Whiting",
+	    "email": "josh@invitenetworks.com",
+	    "homepage": "http://www.invitenetworks.com"
+	}
+    ],
+    "require": {
+	"invite/cisco-wsapi": "dev-master",
+	"symfony/framework-bundle": ">=2.4.0"
+    },
+    "autoload": {
+	"psr-0": {"Invite\\Bundle\\Cisco\\WsapiBundle": ""}
+    },
+    "target-dir": "Invite/Bundle/Cisco/WsapiBundle"
+}
