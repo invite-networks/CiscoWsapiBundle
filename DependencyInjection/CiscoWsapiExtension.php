@@ -34,7 +34,7 @@ class CiscoWsapiExtension extends Extension
         $loader->load('services.yml');
 
         /**
-         * Set Cisco IOS Gateway SOAP API Url from IP/Hostname supplied in config params
+         * Set Cisco IOS Gateway SOAP API Url from IP/Hostname supplied in config params.
          */
         $container->setParameter('cisco_wsapi.app_host', $config['app']['host']);
         $container->setParameter('cisco_wsapi.app_protocol', $config['app']['protocol']);
