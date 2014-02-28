@@ -37,11 +37,12 @@ class CiscoWsapiExtension extends Extension
          * Set Cisco IOS Gateway SOAP API Url from IP/Hostname supplied in config params.
          */
         $container->setParameter('cisco_wsapi.app_host', $config['app']['host']);
-        $container->setParameter('cisco_wsapi.app_protocol', $config['app']['protocol']);
+        $container->setParameter('cisco_wsapi.app_port', $config['app']['port']);
+        $container->setParameter('cisco_wsapi.app_scheme', $config['app']['scheme']);
         $container->setParameter('cisco_wsapi.xcc.app_name', $config['app']['xcc_name']);
         $container->setParameter('cisco_wsapi.xsvc.app_name', $config['app']['xsvc_name']);
         $container->setParameter('cisco_wsapi.xcdr.app_name', $config['app']['xcdr_name']);
-        $container->setParameter('cisco_wsapi.protocol', $config['providers']['protocol']);
+        $container->setParameter('cisco_wsapi.scheme', $config['providers']['scheme']);
         $container->setParameter('cisco_wsapi.xcdr.cdr_format', $config['providers']['xcdr_cdr_format']);
         $container->setParameter('cisco_wsapi.soap.exception', $config['soap']['exception']);
         $container->setParameter('cisco_wsapi.soap.trace', $config['soap']['trace']);

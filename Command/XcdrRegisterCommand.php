@@ -34,6 +34,16 @@ class XcdrRegisterCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $container = $this->getContainer();
+        $router = $container->get('router');
+        $context = $router->getContext();
+        $host = $container->getParameter('cisco_wsapi.app_host');
+        $port = $container->getParameter('cisco_wsapi.app_port');
+        $scheme = $container->getParameter('cisco_wsapi.app_scheme');
+        $context->setHost($host);
+        $context->setPort($port);
+        $context->setScheme($scheme);
+        $route = $router->generate('cisco_wsapi.xcdr_app');
+        ldd($route);
         $xcdrApi = $container->get('cisco_wsapi.xcdr_client');
         $xcdrHosts = $container->getParameter('xcdr_hosts');
         foreach ($xcdrHosts as $customer => $hosts) {
