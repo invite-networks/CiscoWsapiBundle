@@ -14,8 +14,10 @@
     ],
     "require": {
 	"invite/cisco-wsapi": "dev-master",
-	"symfony/framework-bundle": ">=2.4.0",
-	"colourstream/cron-bundle": "dev-master"
+	"symfony/framework-bundle": ">=2.4.0"
+    },
+    "suggest": {
+	"invite/cron-bundle": "If you want to schedule app registration automated crons from symfony console"
     },
     "autoload": {
 	"psr-0": {"Invite\\Bundle\\Cisco\\WsapiBundle": ""}
