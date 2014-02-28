@@ -41,8 +41,7 @@ class XcdrListener implements XcdrListenerInterface
     }
 
     /**
-     * Implementing class must provide method to
-     * process probing updates.
+     * Dispatch Xcdr Probing Event.
      * 
      * @param array $data
      */
@@ -50,13 +49,12 @@ class XcdrListener implements XcdrListenerInterface
     {
         $probingEvent = new XcdrProbingEvent($data);
         $this->dispatcher->dispatch(
-                WsapiEvents::XCDR_PROBING, $probingEvent)
-        ;
+                WsapiEvents::XCDR_PROBING, $probingEvent
+        );
     }
 
     /**
-     * Implementing class must provide method to
-     * process status update.
+     * Dispatch Xcdr Status Event.
      * 
      * @param array $data
      */
@@ -64,13 +62,12 @@ class XcdrListener implements XcdrListenerInterface
     {
         $statusEvent = new XcdrStatusEvent($data);
         $this->dispatcher->dispatch(
-                WsapiEvents::XCDR_STATUS, $statusEvent)
-        ;
+                WsapiEvents::XCDR_STATUS, $statusEvent
+        );
     }
 
     /**
-     * Implementing class must provide method to
-     * process unregister msg.
+     * Dispatch Xcdr UnRegister Event.
      * 
      * @param array $data Must be md array with csv key.
      */
@@ -78,13 +75,12 @@ class XcdrListener implements XcdrListenerInterface
     {
         $unregisterEvent = new XcdrUnregisterEvent($data);
         $this->dispatcher->dispatch(
-                WsapiEvents::XCDR_UNREGISTER, $unregisterEvent)
-        ;
+                WsapiEvents::XCDR_UNREGISTER, $unregisterEvent
+        );
     }
 
     /**
-     * Implementing class must provide method to
-     * set csv data in class.
+     * Dispatch Xcdr NotifyRecord Event.
      * 
      * @param array $data Must be md array with csv key.
      */
@@ -92,8 +88,8 @@ class XcdrListener implements XcdrListenerInterface
     {
         $recordEvent = new XcdrRecordEvent($data);
         $this->dispatcher->dispatch(
-                WsapiEvents::XCDR_RECORD, $recordEvent)
-        ;
+                WsapiEvents::XCDR_RECORD, $recordEvent
+        );
     }
 
 }
