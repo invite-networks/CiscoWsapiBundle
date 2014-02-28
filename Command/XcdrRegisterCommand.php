@@ -20,6 +20,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  * XcdrRegisterCommand.
  *
  * @author Josh Whiting <josh@invitenetworks.com>
+ * 
+ * @CronJob("PT5M")
  */
 class XcdrRegisterCommand extends ContainerAwareCommand
 {
