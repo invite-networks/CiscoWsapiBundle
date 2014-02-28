@@ -88,8 +88,8 @@ class XcdrListener implements XcdrListenerInterface
      */
     public function processCdrRecord($data)
     {
-        $this->logger->critical('XcdrListener: I saw the record here...');
-        var_dump($data);
+        // $this->logger->critical('XcdrListener: I saw the record here...');
+        // var_dump($data);
 
         $recordEvent = new XcdrRecordEvent($data);
         $this->dispatcher->dispatch(
