@@ -47,7 +47,7 @@ class CiscoWsapiExtension extends Extension
         $container->setParameter('cisco_wsapi.xcdr.cdr_format', $config['providers']['xcdr_cdr_format']);
         $container->setParameter('cisco_wsapi.soap.exception', $config['soap']['exception']);
         $container->setParameter('cisco_wsapi.soap.trace', $config['soap']['trace']);
-        $container->setParameter('cisco_wsapi.soap.conn_timeout', $config['soap']['conn_timeout']);
+        $container->setParameter('cisco_wsapi.soap.connection_timeout', $config['soap']['connection_timeout']);
         $container->setParameter('cisco_wsapi.soap.socket_timeout', $config['soap']['socket_timeout']);
     }
 
