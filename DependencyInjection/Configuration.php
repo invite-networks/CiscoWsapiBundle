@@ -129,7 +129,7 @@ class Configuration implements ConfigurationInterface
                 ->defaultFalse()
                 ->info('Enable/Disable SoapClient Exception Faults')
                 ->end()
-                ->scalarNode('conn_timeout')
+                ->scalarNode('connection_timeout')
                 ->defaultValue(5)
                 ->info('Set the Soap Client Connection Timeout, for services with slow response. See default_socket_timeout')
                 ->example('time in seconds')
