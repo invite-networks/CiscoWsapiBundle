@@ -105,7 +105,7 @@ class Configuration implements ConfigurationInterface
                 ->info('INVITE Wsapi Application Host')
                 ->end()
                 ->scalarNode('port')
-                ->defaultValue(80)
+                ->defaultValue(8090)
                 ->info('INVITE Wsapi Application Port')
                 ->end()
                 ->scalarNode('scheme')

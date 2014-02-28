@@ -42,10 +42,15 @@ class XcdrRegisterCommand extends ContainerAwareCommand
         $port = $container->getParameter('cisco_wsapi.app_port');
         $scheme = $container->getParameter('cisco_wsapi.app_scheme');
         $context->setHost($host);
-        $context->setPort($port);
         $context->setScheme($scheme);
+
+        if ($scheme === 'https') {
+            $context->setHttpsPort($port);
+        } else {
+            $context->setHttpPort($port);
+        }
+
         $route = $router->generate('cisco_wsapi.xcdr_app');
-        ldd($route);
         $xcdrApi = $container->get('cisco_wsapi.xcdr_client');
         $xcdrHosts = $container->getParameter('xcdr_hosts');
         foreach ($xcdrHosts as $customer => $hosts) {
