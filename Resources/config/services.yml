@@ -24,4 +24,4 @@ services:
           
     cisco_wsapi.xcdr_listener:
         class:        "%cisco_wsapi.xcdr_listener.class%"
-        arguments:    ["@event_dispatcher"]
+        arguments:    ["@event_dispatcher", "@?monolog.logger.wsapi"]

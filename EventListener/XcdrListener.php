@@ -31,13 +31,15 @@ class XcdrListener implements XcdrListenerInterface
      * @var \Symfony\Component\EventDispatcher\EventDispatcher
      */
     private $dispatcher;
+    private $logger;
 
     /**
      * @param \Symfony\Component\EventDispatcher\EventDispatcher $dispatcher
      */
-    public function __construct(EventDispatcher $dispatcher)
+    public function __construct(EventDispatcher $dispatcher, $logger = null)
     {
         $this->dispatcher = $dispatcher;
+        $this->logger = $logger;
     }
 
     /**
@@ -86,6 +88,8 @@ class XcdrListener implements XcdrListenerInterface
      */
     public function processCdrRecord($data)
     {
+        $this->logger->error('XcdrListener: I saw the record here...');
+
         $recordEvent = new XcdrRecordEvent($data);
         $this->dispatcher->dispatch(
                 WsapiEvents::XCDR_RECORD, $recordEvent
