@@ -12,6 +12,7 @@ namespace Invite\Bundle\Cisco\WsapiBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Output\OutputInterface;
 use Invite\Component\Ssh\Client\Cisco\IosSshClient;
 
@@ -25,18 +26,35 @@ class XcdrCheckCommand extends ContainerAwareCommand
 
     protected function configure()
     {
-        $this->setName('invite:wsapi:xcdr:check')
+        $this
+                ->setName('invite:wsapi:xcdr:check')
                 ->setDescription('Check if there is an active registration with UC Gateway')
+                ->addArgument(
+                        'host', InputArgument::REQUIRED, 'Hostname or IP address of device'
+                )
+                ->addArgument(
+                        'username', InputArgument::REQUIRED, 'Username to login to the device'
+                )
+                ->addArgument(
+                        'password', InputArgument::REQUIRED, 'Password to login to the device'
+                )
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $client = new IosSshClient('209.180.87.74', 'invite', '!NV!TE|Customer');
+        $host = $input->getArgument('host');
+        $username = $input->getArgument('username');
+        $password = $input->getArgument('password');
+
+        $client = new IosSshClient($host, $username, $password);
 
         $client->connect();
-        $data = $client->exec('show wsapi registration all');
+        $data = $client->wsapiXcdrReg();
         $client->close();
+
+        // Debug
+        $output->writeln('<fg=black;bg=cyan>' . print_r($data) . '</fg=black;bg=cyan>');
 
         $output->writeln('<info>' . $data . '</info>');
     }
