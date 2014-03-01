@@ -13,9 +13,9 @@
 	}
     ],
     "require": {
-	"invite/cisco-wsapi": "1.0.*",
-	"invite/ssh-client": "1.0.*",
-	"invite/cron-bundle": "1.0.*",
+	"invite/cisco-wsapi": "1.0.*@dev",
+	"invite/ssh-client": "1.0.*@dev",
+	"invite/cron-bundle": "1.0.*@dev",
 	"symfony/framework-bundle": ">=2.4.0"
     },
     "extra": {
