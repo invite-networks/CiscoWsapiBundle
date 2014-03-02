@@ -1,6 +1,7 @@
 parameters:
     cisco_wsapi.xcdr_server.class:   Invite\Component\Cisco\Wsapi\Server\XcdrServer
     cisco_wsapi.xcdr_client.class:   Invite\Bundle\Cisco\WsapiBundle\Client\XcdrClient
+    cisco_wsapi.cache_manager.class: Invite\Bundle\Cisco\WsapiBundle\Cache\CacheManager
     cisco_wsapi.xcdr_listener.class: Invite\Bundle\Cisco\WsapiBundle\EventListener\XcdrListener
         
 services:
@@ -23,6 +24,11 @@ services:
               exception:        "%cisco_wsapi.soap.exception%"
               socket:           "%cisco_wsapi.soap.socket_timeout%"
               cdr_format:       "%cisco_wsapi.xcdr.cdr_format%"
+           
+    cisco_wsapi.cache_manager:
+        class:                  "%cisco_wsapi.cache_manager.class%"
+        arguments:
+           options:
               redis_enabled:    "%cisco_wsapi.redis_enabled%"
               memcache_enabled: "%cisco_wsapi.memcache_enabled%"
            redis:               "@?cisco_wsapi.redis_service"

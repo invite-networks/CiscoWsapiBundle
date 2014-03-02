@@ -13,6 +13,7 @@ namespace Invite\Bundle\Cisco\WsapiBundle\Client;
 use Symfony\Component\DependencyInjection\Exception\LogicException;
 use Symfony\Component\Routing\Router;
 use Invite\Component\Cisco\Wsapi\Client\XcdrClient as BaseXcdrClient;
+use Invite\Bundle\Cisco\WsapiBundle\Cache\CacheManager;
 
 /**
  * INVITE Cisco WsApi XCDR Client
@@ -31,14 +32,9 @@ class XcdrClient
     protected $router;
 
     /**
-     * @var Redis client
+     * @var \Invite\Bundle\Cisco\WsapiBundle\Cache\CacheManager
      */
-    protected $redis;
-
-    /**
-     * @var Memcache client
-     */
-    protected $memcache;
+    protected $cacheManager;
 
     /**
      * @array Xcdr client options
@@ -49,19 +45,19 @@ class XcdrClient
      * Xcdr Soap client construct.
      * 
      * @param \Symfony\Component\Routing\Router $router
+     * @param \Invite\Bundle\Cisco\WsapiBundle\Cache\CacheManager $cacheManager
      * @param array of client setup parameters $options
      */
-    public function __construct(Router $router, $options, $redis = null, $memcache = null)
+    public function __construct(Router $router, CacheManager $cacheManager, $options)
     {
         $this->router = $router;
-        $this->redis = $redis;
-        $this->memcache = $memcache;
+        $this->cacheManager = $cacheManager;
         $this->options = $options;
     }
 
     public function register($host, $extras = array(), $url = null)
     {
-        if ($this->checkCache($host)) {
+        if ($this->cacheManager->checkCache($host, 'xcdr')) {
             return array('status' => $host . ' is already registered with XCDR Provider');
         }
 
@@ -81,81 +77,22 @@ class XcdrClient
         }
 
         $xcdrClient = new BaseXcdrClient();
-        $this->options['transactionId'] = uniqid('xcdr');
+        $tId = uniqid('xcdr');
+        $this->options['transactionId'] = $tId;
         $result = $xcdrClient->requestXcdrRegister($host, $route, $this->options);
-        $this->setCache($host, $route, $result, $extras);
+        $cache = $this->setCache($host, $route, $result, 'xcdr', $tId, $extras);
+
+        if ($cache['status'] === 'error') {
+            return array(
+                'status' => $host . ' Error: ' . $cache['message'],
+                'result' => $result
+            );
+        }
 
         return array(
             'status' => $host . ' registered successfully!',
             'result' => $result
         );
-    }
-
-    public function checkCache($host)
-    {
-        if ($this->options['redis_enabled']) {
-            if ($this->redis) {
-                $ns = 'xcdr:' . $host;
-                if ($this->redis->exists($ns)) {
-                    if ($this->redis->hexists($ns, 'reg.id')) {
-                        if ($this->redis->get($ns, 'status' === 'IN_SERVICE')) {
-                            return true;
-                        }
-                    }
-                }
-            } else {
-                $msg = 'Redis service enabled but no service provided.';
-                throw new LogicException($msg);
-            }
-        }
-        if ($this->options['memcache_enabled']) {
-            // TODO finish memcache logic
-        }
-
-        // TODO write to disk cache?
-        return false;
-    }
-
-    public function setCache($host, $route, $result, $extras)
-    {
-        $msgHdr = $result['msgHeader'];
-        $transactionId = $this->options['transactionId'];
-
-        if ($transactionId !== $msgHdr->transactionID) {
-            $msg = 'transactionIDs dont match';
-            if ($this->redis) {
-                $this->redis->set('log:xcdr:client', $msg);
-            } elseif ($this->memcache) {
-                $this->redis->set('log:xcdr:client', $msg);
-            }
-            return $msg;
-        }
-
-        if ($this->options['redis_enabled']) {
-            if ($this->redis) {
-                $ns = 'xcdr:' . $host;
-                $this->redis->hmset($ns, array(
-                    'app.route' => $route,
-                    'reg.id' => $msgHdr->registrationID,
-                    'status' => $result['providerStatus']
-                ));
-                if (count($extras) > 0) {
-                    foreach ($extras as $k => $v) {
-                        $this->redis->hset($ns, $k, $v);
-                    }
-                }
-                $this->redis->expire($ns, 3600);
-            } else {
-                $msg = 'Redis service enabled but no service provided.';
-                throw new LogicException($msg);
-            }
-        }
-        if ($this->options['memcache_enabled']) {
-            // TODO finish memcache logic
-        }
-
-        // TODO write to disk cache?
-        return;
     }
 
 }
