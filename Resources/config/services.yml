@@ -13,6 +13,7 @@ services:
         class:                  "%cisco_wsapi.xcdr_client.class%"
         arguments:
            router:              "@router"
+           cacheManager:        "@cisco_wsapi.cache_manager"
            options:
               scheme:           "%cisco_wsapi.scheme%"
               app_name:         "%cisco_wsapi.xcdr.app_name%"
