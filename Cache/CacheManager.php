@@ -11,6 +11,7 @@
 namespace Invite\Bundle\Cisco\WsapiBundle\Cache;
 
 use Symfony\Component\DependencyInjection\Exception\LogicException;
+use Predis\Client as PredisClient;
 
 /**
  * INVITE Cisco WsApi Cache Manager
@@ -24,7 +25,7 @@ class CacheManager
 {
 
     /**
-     * @var Redis client
+     * @var \Predis\Client
      */
     protected $redis;
 
@@ -41,10 +42,10 @@ class CacheManager
     /**
      * Xcdr Soap client construct.
      * 
-     * @param \Symfony\Component\Routing\Router $router
-     * @param array of client setup parameters $options
+     * @param array of wsapi client parameters $options
+     * @param \Predis\Client $redis
      */
-    public function __construct($options, $redis = null, $memcache = null)
+    public function __construct($options, PredisClient $redis = null, $memcache = null)
     {
         $this->redis = $redis;
         $this->memcache = $memcache;

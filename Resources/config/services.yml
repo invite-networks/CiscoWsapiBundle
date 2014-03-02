@@ -31,8 +31,8 @@ services:
            options:
               redis_enabled:    "%cisco_wsapi.redis_enabled%"
               memcache_enabled: "%cisco_wsapi.memcache_enabled%"
-           redis:               "@?cisco_wsapi.redis_service"
-           memcache:            "@?cisco_wsapi.memcache_service"
+           redis:               "@?cisco_wsapi.redis"
+           memcache:            "@?cisco_wsapi.memcache"
 
     cisco_wsapi.xcdr_listener:
         class:                  "%cisco_wsapi.xcdr_listener.class%"

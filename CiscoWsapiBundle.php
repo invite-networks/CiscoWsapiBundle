@@ -2,8 +2,6 @@
 /*
  * This file is part of the Invite Wsapi Bundle
  *
- * The bundle provides a mapping to Cisco's IOS UC Gateway Api.
- *
  * (c) Invite Networks Inc. <info@invitenetworks.com>
  *
  * For the full copyright and license information, 
@@ -13,6 +11,8 @@
 namespace Invite\Bundle\Cisco\WsapiBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
+use Invite\Bundle\Cisco\WsapiBundle\DependencyInjection\Compiler\CacheCompilerPass;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * CiscoWsapiBundle.
@@ -21,5 +21,12 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
  */
 class CiscoWsapiBundle extends Bundle
 {
-    
+
+    public function build(ContainerBuilder $container)
+    {
+        parent::build($container);
+
+        $container->addCompilerPass(new CacheCompilerPass());
+    }
+
 }

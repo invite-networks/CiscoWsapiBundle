@@ -83,10 +83,8 @@ class XcdrClient
         $cache = $this->setCache($host, $route, $result, 'xcdr', $tId, $extras);
 
         if ($cache['status'] === 'error') {
-            return array(
-                'status' => $host . ' Error: ' . $cache['message'],
-                'result' => $result
-            );
+            $cache['result'] = $result;
+            return $cache;
         }
 
         return array(
