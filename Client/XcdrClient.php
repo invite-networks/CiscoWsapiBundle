@@ -34,7 +34,7 @@ class XcdrClient
     /**
      * @var \Invite\Bundle\Cisco\WsapiBundle\Cache\CacheManager
      */
-    protected $cacheManager;
+    protected $cm;
 
     /**
      * @array Xcdr client options
@@ -50,21 +50,21 @@ class XcdrClient
      * Xcdr Soap client construct.
      * 
      * @param \Symfony\Component\Routing\Router $router
-     * @param \Invite\Bundle\Cisco\WsapiBundle\Cache\CacheManager $cacheManager
+     * @param \Invite\Bundle\Cisco\WsapiBundle\Cache\CacheManager $cm
      * @param array of client setup parameters $options
      * @param \Symfony\Bridge\Monolog\Logger $logger
      */
-    public function __construct(Router $router, CacheManager $cacheManager, $options, Logger $logger)
+    public function __construct(Router $router, CacheManager $cm, $options, Logger $logger)
     {
         $this->router = $router;
-        $this->cacheManager = $cacheManager;
+        $this->cm = $cm;
         $this->options = $options;
         $this->logger = $logger;
     }
 
     public function register($host, $extras = array(), $url = null)
     {
-        if ($this->cacheManager->checkCache($host, 'xcdr')) {
+        if ($this->cm->checkCache($host, 'xcdr')) {
             $msg = $host . ' is already registered with XCDR Provider ';
             return array(
                 'status' => 'success',
@@ -98,10 +98,10 @@ class XcdrClient
             return $result;
         }
 
-        $cache = $this->setCache($host, $route, $result, 'xcdr', $tId, $extras);
+        $cache = $this->cm->setCache($host, $route, $result['result'], 'xcdr', $tId, $extras);
 
         if ($cache['status'] === 'error') {
-            // Already logged by CacheManager
+            // Already logged in CacheManager
             return $cache;
         }
 
