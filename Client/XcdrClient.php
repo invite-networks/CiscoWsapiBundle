@@ -78,10 +78,10 @@ class XcdrClient
             $context->setHost($this->optons['app_host']);
             $context->setScheme($this->optons['app_scheme']);
 
-            if ($this->optons['app_scheme'] === 'https') {
-                $context->setHttpsPort($this->optons['app_port']);
+            if ($this->options['app_scheme'] === 'https') {
+                $context->setHttpsPort($this->options['app_port']);
             } else {
-                $context->setHttpPort($this->optons['app_port']);
+                $context->setHttpPort($this->options['app_port']);
             }
             $route = $this->router->generate('cisco_wsapi.xcdr_app', array(), true);
         } else {
