@@ -10,8 +10,8 @@
  */
 namespace Invite\Bundle\Cisco\WsapiBundle\Client;
 
-use Symfony\Component\DependencyInjection\Exception\LogicException;
 use Symfony\Component\Routing\Router;
+use Symfony\Bridge\Monolog\Logger;
 use Invite\Component\Cisco\Wsapi\Client\XcdrClient as BaseXcdrClient;
 use Invite\Bundle\Cisco\WsapiBundle\Cache\CacheManager;
 
@@ -42,26 +42,35 @@ class XcdrClient
     protected $options = array();
 
     /**
+     * @var \Symfony\Bridge\Monolog\Logger
+     */
+    protected $logger;
+
+    /**
      * Xcdr Soap client construct.
      * 
      * @param \Symfony\Component\Routing\Router $router
      * @param \Invite\Bundle\Cisco\WsapiBundle\Cache\CacheManager $cacheManager
      * @param array of client setup parameters $options
+     * @param \Symfony\Bridge\Monolog\Logger $logger
      */
-    public function __construct(Router $router, CacheManager $cacheManager, $options)
+    public function __construct(Router $router, CacheManager $cacheManager, $options, Logger $logger)
     {
         $this->router = $router;
         $this->cacheManager = $cacheManager;
         $this->options = $options;
+        $this->logger = $logger;
     }
 
     public function register($host, $extras = array(), $url = null)
     {
         if ($this->cacheManager->checkCache($host, 'xcdr')) {
+            $msg = $host . ' is already registered with XCDR Provider ';
             return array(
                 'status' => 'success',
-                'message' => $host . ' is already registered with XCDR Provider'
+                'message' => $msg
             );
+            $this->logger->info($msg);
         }
 
         if (!$url) {
@@ -85,12 +94,14 @@ class XcdrClient
         $result = $xcdrClient->requestXcdrRegister($host, $route, $this->options);
 
         if ($result['status'] === 'error') {
+            $this->logger->alert($result['message'] . ' ' . $result['class']);
             return $result;
         }
 
         $cache = $this->setCache($host, $route, $result, 'xcdr', $tId, $extras);
 
         if ($cache['status'] === 'error') {
+            // Already logged in CacheManager
             return $cache;
         }
 

@@ -27,18 +27,16 @@ class XcdrController extends ContainerAware
     public function serverAction()
     {
         $xcdrServer = $this->container->get('cisco_wsapi.xcdr_server');
-
         $response = new Response();
         $response->headers->set('Content-Type', 'application/soap+xml');
-
         $result = $xcdrServer->processXcdr();
 
         if ($result['status'] === 'error') {
             $response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE);
-            $msg = 'XCDR Conroller: ' . $result['message'];
-            $response->setContent($msg);
+            $response->setContent($result['message']);
+            $host = $this->container->get('request')->getClientIp();
             $logger = $this->container->get('logger');
-            $logger->error('XCDR:CONTROLLER: SOAP SERVER ERROR: ' . $msg);
+            $logger->alert($host . ' : ' . $result['message'] . ' : ' . $result['class']);
         } else {
             $response->setContent($result['result']);
         }

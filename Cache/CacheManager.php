@@ -11,6 +11,7 @@
 namespace Invite\Bundle\Cisco\WsapiBundle\Cache;
 
 use Symfony\Component\DependencyInjection\Exception\LogicException;
+use Symfony\Bridge\Monolog\Logger;
 use Predis\Client as PredisClient;
 
 /**
@@ -25,6 +26,11 @@ class CacheManager
 {
 
     /**
+     * @array Xcdr client options
+     */
+    protected $options = array();
+
+    /**
      * @var \Predis\Client
      */
     protected $redis;
@@ -35,9 +41,9 @@ class CacheManager
     protected $memcache;
 
     /**
-     * @array Xcdr client options
+     * @var Memcache client
      */
-    protected $options = array();
+    protected $logger;
 
     /**
      * Xcdr Soap client construct.
@@ -45,11 +51,12 @@ class CacheManager
      * @param array of wsapi client parameters $options
      * @param \Predis\Client $redis
      */
-    public function __construct($options, PredisClient $redis = null, $memcache = null)
+    public function __construct($options, Logger $logger, PredisClient $redis = null, $memcache = null)
     {
+        $this->options = $options;
+        $this->logger = $logger;
         $this->redis = $redis;
         $this->memcache = $memcache;
-        $this->options = $options;
     }
 
     public function checkCache($host, $type)
@@ -65,8 +72,9 @@ class CacheManager
                     }
                 }
             } else {
-                $msg = 'Redis service enabled but no service provided.';
-                throw new LogicException($msg);
+                $msg = 'Redis service enabled but no service provided. ';
+                $this->logger->emergency($msg . get_class($this));
+                throw new LogicException($msg . get_class($this));
             }
         }
         if ($this->options['memcache_enabled']) {
@@ -83,10 +91,13 @@ class CacheManager
 
         if ($tId) {
             if ($tId !== $msgHdr->transactionID) {
+                $msg = 'Redis service enabled but no service provided. ';
+                $this->logger->alert($msg . get_class($this));
                 return array(
                     'status' => 'error',
                     'type' => 'cache',
-                    'message' => 'transactionIDs do not match'
+                    'message' => $msg,
+                    'class' => get_class($this)
                 );
             }
         }
@@ -106,8 +117,9 @@ class CacheManager
                 }
                 $this->redis->expire($ns, 3600);
             } else {
-                $msg = 'Redis service enabled but no service provided.';
-                throw new LogicException($msg);
+                $msg = 'Redis service enabled but no service provided. ';
+                $this->logger->emergency($msg . get_class($this));
+                throw new LogicException($msg . get_class($this));
             }
         }
         if ($this->options['memcache_enabled']) {

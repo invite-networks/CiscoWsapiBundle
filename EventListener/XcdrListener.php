@@ -11,6 +11,7 @@
 namespace Invite\Bundle\Cisco\WsapiBundle\EventListener;
 
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Bridge\Monolog\Logger;
 use Invite\Component\Cisco\Wsapi\Model\XcdrListenerInterface;
 use Invite\Bundle\Cisco\WsapiBundle\WsapiEvents;
 use Invite\Bundle\Cisco\WsapiBundle\Event\XcdrProbingEvent;
@@ -31,12 +32,17 @@ class XcdrListener implements XcdrListenerInterface
      * @var \Symfony\Component\EventDispatcher\EventDispatcher
      */
     private $dispatcher;
+
+    /**
+     * @var \Symfony\Bridge\Monolog\Logger
+     */
     private $logger;
 
     /**
      * @param \Symfony\Component\EventDispatcher\EventDispatcher $dispatcher
+     * @param \Symfony\Bridge\Monolog\Logger $logger
      */
-    public function __construct(EventDispatcher $dispatcher, $logger = null)
+    public function __construct(EventDispatcher $dispatcher, Logger $logger)
     {
         $this->dispatcher = $dispatcher;
         $this->logger = $logger;
