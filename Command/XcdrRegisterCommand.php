@@ -39,7 +39,7 @@ class XcdrRegisterCommand extends ContainerAwareCommand
         foreach ($hosts as $host) {
             $extras = array('customer' => 'stevens-henegar-college');
             $result = $client->register($host, $extras);
-            $output->writeln('<info>' . $result['status'] . '</info>');
+            $output->writeln('<comment>' . strtoupper($result['status']) . '</comment> : <info>' . $result['message'] . '</info>');
         }
     }
 

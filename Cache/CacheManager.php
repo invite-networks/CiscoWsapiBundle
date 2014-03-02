@@ -85,6 +85,7 @@ class CacheManager
             if ($tId !== $msgHdr->transactionID) {
                 return array(
                     'status' => 'error',
+                    'type' => 'cache',
                     'message' => 'transactionIDs do not match'
                 );
             }
@@ -115,7 +116,8 @@ class CacheManager
 
         // TODO write to disk cache?
         return array(
-            'status' => 'success'
+            'status' => 'success',
+            'message' => 'Cache was successfully set for host ' . $host
         );
     }
 

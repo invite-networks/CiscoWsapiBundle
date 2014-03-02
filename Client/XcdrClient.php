@@ -58,7 +58,10 @@ class XcdrClient
     public function register($host, $extras = array(), $url = null)
     {
         if ($this->cacheManager->checkCache($host, 'xcdr')) {
-            return array('status' => $host . ' is already registered with XCDR Provider');
+            return array(
+                'status' => 'success',
+                'message' => $host . ' is already registered with XCDR Provider'
+            );
         }
 
         if (!$url) {
@@ -80,15 +83,20 @@ class XcdrClient
         $tId = uniqid('xcdr');
         $this->options['transactionId'] = $tId;
         $result = $xcdrClient->requestXcdrRegister($host, $route, $this->options);
+
+        if ($result['status'] === 'error') {
+            return $result;
+        }
+
         $cache = $this->setCache($host, $route, $result, 'xcdr', $tId, $extras);
 
         if ($cache['status'] === 'error') {
-            $cache['result'] = $result;
             return $cache;
         }
 
         return array(
-            'status' => $host . ' registered successfully!',
+            'status' => 'success',
+            'message' => $host . ' registered successfully!',
             'result' => $result
         );
     }
