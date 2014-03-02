@@ -1,4 +1,4 @@
 cisco_wsapi.xcdr_app:
     path:      /wsapi/xcdr
-    defaults:  { _controller: CiscoWsapiBundle:Xcdr:api }
+    defaults:  { _controller: CiscoWsapiBundle:Xcdr:server }
     methods:   [POST]

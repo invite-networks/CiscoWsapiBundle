@@ -1,28 +1,33 @@
 parameters:
     cisco_wsapi.xcdr_server.class:   Invite\Component\Cisco\Wsapi\Server\XcdrServer
-    cisco_wsapi.xcdr_client.class:   Invite\Component\Cisco\Wsapi\Client\XcdrClient
+    cisco_wsapi.xcdr_client.class:   Invite\Bundle\Cisco\WsapiBundle\Client\XcdrClient
     cisco_wsapi.xcdr_listener.class: Invite\Bundle\Cisco\WsapiBundle\EventListener\XcdrListener
         
 services:
     cisco_wsapi.xcdr_server:
-        class:        "%cisco_wsapi.xcdr_server.class%"
-        arguments:    ["@cisco_wsapi.xcdr_listener"]
-        
+        class:                  "%cisco_wsapi.xcdr_server.class%"
+        arguments:              ["@cisco_wsapi.xcdr_listener"] 
+       
     cisco_wsapi.xcdr_client:
-        class:        "%cisco_wsapi.xcdr_client.class%"
+        class:                  "%cisco_wsapi.xcdr_client.class%"
         arguments:
+           router:              "@router"
            options:
-              scheme: "%cisco_wsapi.scheme%"
-              app_name: "%cisco_wsapi.xcdr.app_name%"
-              app_host: "%cisco_wsapi.app_host%"
-              app_port: "%cisco_wsapi.app_port%"
-              app_scheme: "%cisco_wsapi.app_scheme%"
-              connection: "%cisco_wsapi.soap.connection_timeout%"
-              trace: "%cisco_wsapi.soap.trace%"
-              exception: "%cisco_wsapi.soap.exception%"
-              socket: "%cisco_wsapi.soap.socket_timeout%"
-              cdr_format: "%cisco_wsapi.xcdr.cdr_format%"
-          
+              scheme:           "%cisco_wsapi.scheme%"
+              app_name:         "%cisco_wsapi.xcdr.app_name%"
+              app_host:         "%cisco_wsapi.app_host%"
+              app_port:         "%cisco_wsapi.app_port%"
+              app_scheme:       "%cisco_wsapi.app_scheme%"
+              connection:       "%cisco_wsapi.soap.connection_timeout%"
+              trace:            "%cisco_wsapi.soap.trace%"
+              exception:        "%cisco_wsapi.soap.exception%"
+              socket:           "%cisco_wsapi.soap.socket_timeout%"
+              cdr_format:       "%cisco_wsapi.xcdr.cdr_format%"
+              redis_enabled:    "%cisco_wsapi.redis_enabled%"
+              memcache_enabled: "%cisco_wsapi.memcache_enabled%"
+           redis:               "@?cisco_wsapi.redis_service"
+           memcache:            "@?cisco_wsapi.memcache_service"
+
     cisco_wsapi.xcdr_listener:
-        class:        "%cisco_wsapi.xcdr_listener.class%"
-        arguments:    ["@event_dispatcher", "@?monolog.logger.wsapi"]
+        class:                  "%cisco_wsapi.xcdr_listener.class%"
+        arguments:              ["@event_dispatcher", "@?monolog.logger.wsapi"]

@@ -24,7 +24,7 @@ class XcdrController extends ContainerAware
     /**
      * Xcdr Soap Webservice action.
      */
-    public function apiAction()
+    public function serverAction()
     {
         $xcdrServer = $this->container->get('cisco_wsapi.xcdr_server');
 
