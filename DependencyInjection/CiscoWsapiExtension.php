@@ -41,6 +41,8 @@ class CiscoWsapiExtension extends Extension
         $container->setParameter('cisco_wsapi.app_scheme', $config['app']['scheme']);
         $container->setParameter('cisco_wsapi.redis_enabled', $config['app']['redis_enabled']);
         $container->setParameter('cisco_wsapi.memcache_enabled', $config['app']['memcache_enabled']);
+        $container->setParameter('cisco_wsapi.redis_service', $config['app']['redis_service']);
+        $container->setParameter('cisco_wsapi.memcache_service', $config['app']['memcache_service']);
         $container->setParameter('cisco_wsapi.xcc.app_name', $config['app']['xcc_name']);
         $container->setParameter('cisco_wsapi.xsvc.app_name', $config['app']['xsvc_name']);
         $container->setParameter('cisco_wsapi.xcdr.app_name', $config['app']['xcdr_name']);
