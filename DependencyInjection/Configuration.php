@@ -32,23 +32,6 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('cisco_wsapi');
 
-        /* $rootNode->addDefaultsIfNotSet()
-          ->children()
-          ->booleanNode('xcc_enabled')
-          ->defaultFalse()
-          ->info('Enable/Disable Xcc api service')
-          ->end()
-          ->booleanNode('xsvc_enabled')
-          ->defaultFalse()
-          ->info('Enable/Disable Xsvc api service')
-          ->end()
-          ->booleanNode('xcdr_enabled')
-          ->defaultFalse()
-          ->info('Enable/Disable Xcdr api service')
-          ->end()
-          ->end()
-          ; */
-
         /*  $rootNode
           ->children()
           ->arrayNode('ios_hosts')
@@ -150,12 +133,12 @@ class Configuration implements ConfigurationInterface
                 ->info('Enable/Disable SoapClient Exception Faults')
                 ->end()
                 ->scalarNode('connection_timeout')
-                ->defaultValue(15)
+                ->defaultValue(25)
                 ->info('Set the Soap Client Connection Timeout, for services with slow response. See default_socket_timeout')
                 ->example('time in seconds')
                 ->end()
                 ->scalarNode('socket_timeout')
-                ->defaultValue(15)
+                ->defaultValue(25)
                 ->info('Set the Soap Client Default Socket Timeout, this is a global php setting')
                 ->example('time in seconds')
                 ->end()

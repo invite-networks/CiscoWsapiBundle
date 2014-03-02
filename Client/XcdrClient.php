@@ -101,7 +101,7 @@ class XcdrClient
         $cache = $this->setCache($host, $route, $result, 'xcdr', $tId, $extras);
 
         if ($cache['status'] === 'error') {
-            // Already logged in CacheManager
+            // Already logged by CacheManager
             return $cache;
         }
 
