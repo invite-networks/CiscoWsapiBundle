@@ -38,7 +38,7 @@ class XcdrRegisterCommand extends ContainerAwareCommand
         $hosts = $container->getParameter('cisco_wsapi.xcdr_hosts');
         foreach ($hosts as $host) {
             $extras = array('customer' => 'stevens-henegar-college');
-            $result = $client->requestXcdrRegister($host, $extras);
+            $result = $client->register($host, $extras);
             $output->writeln('<info>' . $result['status'] . '</info>');
         }
     }
