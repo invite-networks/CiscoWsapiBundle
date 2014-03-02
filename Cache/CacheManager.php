@@ -16,7 +16,7 @@ use Predis\Client as PredisClient;
 /**
  * INVITE Cisco WsApi Cache Manager
  *
- * @category   CDR
+ * @category   API
  * @author     Josh Whiting <josh@invitenetworks.com>
  * @version    Release: @package_version@
  * @since      Class available since Release 1.1.0

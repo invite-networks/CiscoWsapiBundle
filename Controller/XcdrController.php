@@ -30,7 +30,18 @@ class XcdrController extends ContainerAware
 
         $response = new Response();
         $response->headers->set('Content-Type', 'application/soap+xml');
-        $response->setContent($xcdrServer->processXcdr());
+
+        $result = $xcdrServer->processXcdr();
+
+        if ($result['status'] === 'error') {
+            $response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE);
+            $msg = 'XCDR Conroller: ' . $result['message'];
+            $response->setContent($msg);
+            $logger = $this->container->get('logger');
+            $logger->error('XCDR:CONTROLLER: SOAP SERVER ERROR: ' . $msg);
+        } else {
+            $response->setContent($result['result']);
+        }
 
         return $response;
     }
