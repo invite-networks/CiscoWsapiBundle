@@ -75,8 +75,8 @@ class XcdrClient
 
         if (!$url) {
             $context = $this->router->getContext();
-            $context->setHost($this->optons['app_host']);
-            $context->setScheme($this->optons['app_scheme']);
+            $context->setHost($this->options['app_host']);
+            $context->setScheme($this->options['app_scheme']);
 
             if ($this->options['app_scheme'] === 'https') {
                 $context->setHttpsPort($this->options['app_port']);
