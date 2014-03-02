@@ -33,13 +33,6 @@ class CiscoWsapiExtension extends Extension
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yml');
 
-        if ($config['app']['redis_enabled'] === true) {
-            $loader->load('redis.yml');
-        }
-        if ($config['app']['memcache_enabled'] === true) {
-            $loader->load('memcache.yml');
-        }
-
         /**
          * Set Cisco IOS Gateway SOAP API Url from IP/Hostname supplied in config params.
          */

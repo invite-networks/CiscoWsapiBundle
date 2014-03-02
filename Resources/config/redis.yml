@@ -1,3 +1,0 @@
-services: 
-    cisco_wsapi.redis_service:
-       alias: %cisco_wsapi.redis_service%

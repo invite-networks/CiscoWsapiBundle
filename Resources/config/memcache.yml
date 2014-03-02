@@ -1,3 +1,0 @@
-services: 
-    cisco_wsapi.memcache_service:
-       alias: %cisco_wsapi.memcache_service%
