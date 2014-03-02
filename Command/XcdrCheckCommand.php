@@ -53,10 +53,13 @@ class XcdrCheckCommand extends ContainerAwareCommand
         $data = $client->wsapiXcdrReg();
         $client->close();
 
-        // Debug
-        $output->writeln('<fg=black;bg=cyan>' . print_r($data) . '</fg=black;bg=cyan>');
-
-        $output->writeln('<info>' . $data . '</info>');
+        $output->writeln('<info></info>');
+        $output->writeln('<info>' . $host . ' XCDR Registration Status</info>');
+        $output->writeln('<info>======================================</info>');
+        foreach ($data as $k => $v) {
+            $output->writeln(' <info>' . $k . ' </info>:<comment> ' . $v . '</comment>');
+        }
+        $output->writeln('<info></info>');
     }
 
 }
