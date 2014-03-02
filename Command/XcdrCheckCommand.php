@@ -56,8 +56,12 @@ class XcdrCheckCommand extends ContainerAwareCommand
         $output->writeln('<info></info>');
         $output->writeln('<info>' . $host . ' XCDR Registration Status</info>');
         $output->writeln('<info>======================================</info>');
-        foreach ($data as $k => $v) {
-            $output->writeln(' <info>' . $k . ' </info>:<comment> ' . $v . '</comment>');
+        if ($data) {
+            foreach ($data as $k => $v) {
+                $output->writeln(' <info>' . $k . ' </info>:<comment> ' . $v . '</comment>');
+            }
+        } else {
+            $output->writeln(' <comment> ' . $host . ' does not appear to be registered.</comment>');
         }
         $output->writeln('<info></info>');
     }
