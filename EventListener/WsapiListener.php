@@ -61,9 +61,9 @@ abstract class WsapiListener implements XcdrListenerInterface
      * 
      * @param array $data
      */
-    public function processProbing(WsapiRequestInterface $probingRequest)
+    public function processProbing(WsapiRequestInterface $probingRequest, $responseXml)
     {
-        $probingEvent = new WsapiProbingEvent($probingRequest);
+        $probingEvent = new WsapiProbingEvent($probingRequest, $responseXml);
         $this->dispatcher->dispatch(
                 WsapiEvents::WSAPI_PROBING, $probingEvent
         );
@@ -73,10 +73,12 @@ abstract class WsapiListener implements XcdrListenerInterface
             $options = $probingRequest->getOptions();
             $cache = $this->cm->getCacheByRegId($regId);
             if ($cache) {
-                $cache['ttl'] = $this->cm->getInterval() + 5;
+                $cache['ttl'] = $probingRequest->getInterval() + 5;
                 $this->cm->setCache($cache, $options);
             }
         }
+
+        return $probingEvent->getProbingResponse();
     }
 
     /**
@@ -84,9 +86,9 @@ abstract class WsapiListener implements XcdrListenerInterface
      * 
      * @param array $data
      */
-    public function processStatus(WsapiRequestInterface $statusRequest)
+    public function processStatus(WsapiRequestInterface $statusRequest, $responseXml = null)
     {
-        $statusEvent = new WsapiStatusEvent($statusRequest);
+        $statusEvent = new WsapiStatusEvent($statusRequest, $responseXml);
         $this->dispatcher->dispatch(
                 WsapiEvents::WSAPI_STATUS, $statusEvent
         );
@@ -97,9 +99,9 @@ abstract class WsapiListener implements XcdrListenerInterface
      * 
      * @param array $data Must be md array with csv key.
      */
-    public function processUnregister(WsapiRequestInterface $unregisterRequest)
+    public function processUnregister(WsapiRequestInterface $unregisterRequest, $responseXml)
     {
-        $unregisterEvent = new WsapiUnregisterEvent($unregisterRequest);
+        $unregisterEvent = new WsapiUnregisterEvent($unregisterRequest, $responseXml);
         $this->dispatcher->dispatch(
                 WsapiEvents::WSAPI_UNREGISTER, $unregisterEvent
         );

@@ -20,18 +20,36 @@ class WsapiProbingEvent extends Event
      * @var \Invite\Component\Cisco\Wsapi\Request\WsapiRequestInterface
      */
     protected $probingRequest;
+    protected $responseXml;
 
-    public function __construct(WsapiRequestInterface $probingRequest)
+    public function __construct(WsapiRequestInterface $probingRequest, $responseXml)
     {
         $this->probingRequest = $probingRequest;
+        $this->responseXml = $responseXml;
+    }
+
+    /**
+     * @return object
+     */
+    public function getProbingRequest()
+    {
+        return $this->probingRequest;
     }
 
     /**
      * @return array
      */
-    public function getProbingRequest()
+    public function getProbingResponse()
     {
-        return $this->probingRequest;
+        return $this->responseXml;
+    }
+
+    /**
+     * @param string xml string to send
+     */
+    public function setProbingResponse($responseXml)
+    {
+        $this->responseXml = $responseXml;
     }
 
 }

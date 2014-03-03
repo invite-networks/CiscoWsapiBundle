@@ -20,10 +20,12 @@ class XcdrRecordEvent extends Event
      * @var \Invite\Component\Cisco\Wsapi\Request\XcdrRequest
      */
     protected $recordRequest;
+    protected $responseXml;
 
-    public function __construct(XcdrRequest $recordRequest)
+    public function __construct(XcdrRequest $recordRequest, $responseXml = null)
     {
         $this->recordRequest = $recordRequest;
+        $this->responseXml = $responseXml;
     }
 
     /**
@@ -32,6 +34,22 @@ class XcdrRecordEvent extends Event
     public function getRecordRequest()
     {
         return $this->recordRequest;
+    }
+
+    /**
+     * @return array
+     */
+    public function getRecordResponse()
+    {
+        return $this->responseXml;
+    }
+
+    /**
+     * @param string xml string to send
+     */
+    public function setRecordResponse($responseXml)
+    {
+        $this->responseXml = $responseXml;
     }
 
 }

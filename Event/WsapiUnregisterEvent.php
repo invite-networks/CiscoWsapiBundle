@@ -20,10 +20,12 @@ class WsapiUnregisterEvent extends Event
      * @var \Invite\Component\Cisco\Wsapi\Request\WsapiRequestInterface
      */
     protected $unregisterRequest;
+    protected $responseXml;
 
-    public function __construct(WsapiRequestInterface $unregisterRequest)
+    public function __construct(WsapiRequestInterface $unregisterRequest, $responseXml)
     {
         $this->unregisterRequest = $unregisterRequest;
+        $this->responseXml = $responseXml;
     }
 
     /**
@@ -32,6 +34,22 @@ class WsapiUnregisterEvent extends Event
     public function getUnregisterRequest()
     {
         return $this->unregisterRequest;
+    }
+
+    /**
+     * @return array
+     */
+    public function getUnregisterResponse()
+    {
+        return $this->responseXml;
+    }
+
+    /**
+     * @param string xml string to send
+     */
+    public function setUnregisterResponse($responseXml)
+    {
+        $this->responseXml = $responseXml;
     }
 
 }

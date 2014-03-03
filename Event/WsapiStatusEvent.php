@@ -20,10 +20,12 @@ class WsapiStatusEvent extends Event
      * @var \Invite\Component\Cisco\Wsapi\Request\WsapiRequestInterface
      */
     protected $statusRequest;
+    protected $responseXml;
 
-    public function __construct(WsapiRequestInterface $statusRequest)
+    public function __construct(WsapiRequestInterface $statusRequest, $responseXml = null)
     {
         $this->statusRequest = $statusRequest;
+        $this->responseXml = $responseXml;
     }
 
     /**
@@ -32,6 +34,22 @@ class WsapiStatusEvent extends Event
     public function getStatusRequest()
     {
         return $this->statusRequest;
+    }
+
+    /**
+     * @return array
+     */
+    public function getStatusResponse()
+    {
+        return $this->responseXml;
+    }
+
+    /**
+     * @param string xml string to send
+     */
+    public function setStatusResponse($responseXml)
+    {
+        $this->responseXml = $responseXml;
     }
 
 }

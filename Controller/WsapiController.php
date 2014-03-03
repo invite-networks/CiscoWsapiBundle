@@ -60,7 +60,9 @@ class WsapiController extends ContainerAware
             $response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE);
             $response->setContent($result['message']);
             $logger = $this->container->get('logger');
-            $logger->alert($host . ' : ' . $result['message'] . ' : ' . $result['class']);
+            $logger->alert($request->getClientIP() . ' : '
+                    . $result['message'] . ' : '
+                    . $result['class']);
         } else {
             $response->setContent($result['result']);
         }
