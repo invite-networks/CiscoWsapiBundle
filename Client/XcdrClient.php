@@ -89,7 +89,7 @@ class XcdrClient
         }
 
         $xcdrClient = new BaseXcdrClient();
-        $this->options['transactionId'] = uniqid('xcdr');
+        $this->options['transactionID'] = uniqid('xcdr');
 
         $result = $xcdrClient->requestXcdrRegister($host, $route, $this->options);
 
