@@ -17,6 +17,7 @@ use Invite\Bundle\Cisco\WsapiBundle\Event\WsapiProbingEvent;
 use Invite\Bundle\Cisco\WsapiBundle\Event\WsapiStatusEvent;
 use Invite\Bundle\Cisco\WsapiBundle\Event\WsapiUnregisterEvent;
 use Invite\Bundle\Cisco\WsapiBundle\Cache\CacheManager;
+use Invite\Component\Cisco\Wsapi\Model\XcdrListenerInterface;
 use Invite\Component\Cisco\Wsapi\Request\WsapiRequestInterface;
 
 /**
@@ -25,7 +26,7 @@ use Invite\Component\Cisco\Wsapi\Request\WsapiRequestInterface;
  * Listens for Wsapi events from wsapi library and
  * sets the appropriate Symfony event.
  */
-abstract class WsapiListener
+abstract class WsapiListener implements XcdrListenerInterface
 {
 
     /**

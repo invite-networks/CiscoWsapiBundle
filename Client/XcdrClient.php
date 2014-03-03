@@ -83,7 +83,7 @@ class XcdrClient
             } else {
                 $context->setHttpPort($this->options['app_port']);
             }
-            $route = $this->router->generate('cisco_wsapi.xcdr_app', array(), true);
+            $route = $this->router->generate('cisco_wsapi.xcdr', array(), true);
         } else {
             $route = $url;
         }

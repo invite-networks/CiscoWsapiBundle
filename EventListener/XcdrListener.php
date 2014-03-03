@@ -10,7 +10,6 @@
  */
 namespace Invite\Bundle\Cisco\WsapiBundle\EventListener;
 
-use Invite\Component\Cisco\Wsapi\Model\XcdrListenerInterface;
 use Invite\Bundle\Cisco\WsapiBundle\WsapiEvents;
 use Invite\Bundle\Cisco\WsapiBundle\Event\XcdrRecordEvent;
 use Invite\Bundle\Cisco\WsapiBundle\EventListener\WsapiListener;
@@ -22,7 +21,7 @@ use Invite\Component\Cisco\Wsapi\Request\XcdrRequest;
  * Listens for Xcdr api events from wsapi library and
  * sets the appropriate Symfony event.
  */
-class XcdrListener extends WsapiListener implements XcdrListenerInterface
+class XcdrListener extends WsapiListener
 {
 
     /**
