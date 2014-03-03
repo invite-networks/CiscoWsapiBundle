@@ -63,10 +63,11 @@ class CacheManager
     {
         if ($this->options['redis_enabled']) {
             if ($this->redis) {
-                $ns = $type . ':' . $host;
+                $ns = $type . ':registration:' . $host;
                 if ($this->redis->exists($ns)) {
                     if ($this->redis->hexists($ns, 'reg.id')) {
-                        if ($this->redis->get($ns, 'status' === 'IN_SERVICE')) {
+                        $status = $this->redis->hget($ns, 'status');
+                        if ($status === 'IN_SERVICE') {
                             return true;
                         }
                     }
@@ -85,7 +86,29 @@ class CacheManager
         return false;
     }
 
-    public function setCache($host, $route, $result, $type, $tId = null, $extras = array())
+    public function getCache($host, $type)
+    {
+        if ($this->options['redis_enabled']) {
+            if ($this->redis) {
+                $ns = $type . ':registration:' . $host;
+                if ($this->redis->exists($ns)) {
+                    return $this->redis->hgetall($ns);
+                }
+            } else {
+                $msg = 'Redis service enabled but no service provided. ';
+                $this->logger->emergency($msg . get_class($this));
+                throw new LogicException($msg . get_class($this));
+            }
+        }
+        if ($this->options['memcache_enabled']) {
+            // TODO finish memcache logic
+        }
+
+        // TODO write to disk cache?
+        return false;
+    }
+
+    public function setCache($host, $route, $result, $type, $tId = null, $ttl = 130, $extras = array())
     {
         $msgHdr = $result['msgHeader'];
 
@@ -104,7 +127,7 @@ class CacheManager
 
         if ($this->options['redis_enabled']) {
             if ($this->redis) {
-                $ns = $type . ':' . $host;
+                $ns = $type . ':registration:' . $host;
                 $this->redis->hmset($ns, array(
                     'app.route' => $route,
                     'reg.id' => $msgHdr->registrationID,
@@ -115,7 +138,7 @@ class CacheManager
                         $this->redis->hset($ns, $k, $v);
                     }
                 }
-                $this->redis->expire($ns, 3600);
+                $this->redis->expire($ns, $ttl);
             } else {
                 $msg = 'Redis service enabled but no service provided. ';
                 $this->logger->emergency($msg . get_class($this));
@@ -131,6 +154,29 @@ class CacheManager
             'status' => 'success',
             'message' => 'Cache was successfully set for host ' . $host
         );
+    }
+
+    public function deleteCache($host, $type)
+    {
+        if ($this->options['redis_enabled']) {
+            if ($this->redis) {
+                $ns = $type . ':registration:' . $host;
+                if ($this->redis->exists($ns)) {
+                    $this->redis->del($ns);
+                    return true;
+                }
+            } else {
+                $msg = 'Redis service enabled but no service provided. ';
+                $this->logger->emergency($msg . get_class($this));
+                throw new LogicException($msg . get_class($this));
+            }
+        }
+        if ($this->options['memcache_enabled']) {
+            // TODO finish memcache logic
+        }
+
+        // TODO write to disk cache?
+        return false;
     }
 
 }

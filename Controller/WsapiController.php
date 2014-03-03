@@ -14,17 +14,33 @@ use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * XcdrController.
+ * WsapiController.
  *
  * @author Josh Whiting <josh@invitenetworks.com>
  */
-class XcdrController extends ContainerAware
+class WsapiController extends ContainerAware
 {
+
+    /**
+     * Xcc Soap Webservice action.
+     */
+    public function xccAction()
+    {
+        return;
+    }
+
+    /**
+     * Xsvc Soap Webservice action.
+     */
+    public function xsvcAction()
+    {
+        return;
+    }
 
     /**
      * Xcdr Soap Webservice action.
      */
-    public function serverAction()
+    public function xcdrAction()
     {
         $xcdrServer = $this->container->get('cisco_wsapi.xcdr_server');
         $response = new Response();

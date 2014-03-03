@@ -16,31 +16,31 @@ namespace Invite\Bundle\Cisco\WsapiBundle;
 final class WsapiEvents
 {
     /**
-     * The XCDR_PROBING event occurs when an SolicitXcdrProbing is recieved 
+     * The WSAPI_PROBING event occurs when an SolicitxxxProbing is recieved 
      * from the cisco wsapi.
      *
      * This event allows you take actions in your app based on the status type.
-     * Receives an Invite\Bundle\Cisco\WsapiBundle\Event\XcdrProbingEvent instance.
+     * Receives an Invite\Bundle\Cisco\WsapiBundle\Event\WsapiProbingEvent instance.
      */
 
-    const XCDR_PROBING = 'cisco_wsapi.xcdr.probing';
+    const WSAPI_PROBING = 'cisco_wsapi.probing.event';
 
     /**
-     * The XCDR_STATUS event occurs when an NotifyXcdrStatus is recieved from the cisco wsapi.
+     * The WSAPI_STATUS event occurs when an NotifyxxxStatus is recieved from the cisco wsapi.
      *
      * This event allows you take actions in your app based on the status type.
-     * Receives an Invite\Bundle\Cisco\WsapiBundle\Event\XcdrStatusEvent instance.
+     * Receives an Invite\Bundle\Cisco\WsapiBundle\Event\WsapiStatusEvent instance.
      */
-    const XCDR_STATUS = 'cisco_wsapi.xcdr.status';
+    const WSAPI_STATUS = 'cisco_wsapi.status.event';
 
     /**
-     * The XCDR_UNREGISTER event occurs when an SolicitXcdrProviderUnRegister is recieved 
+     * The WSAPI_UNREGISTER event occurs when an SolicitxxxProviderUnRegister is recieved 
      * from the cisco wsapi.
      *
      * This event allows you take actions in your app based on the status type.
-     * Receives an Invite\Bundle\Cisco\WsapiBundle\Event\XcdrUnregisterEvent instance.
+     * Receives an Invite\Bundle\Cisco\WsapiBundle\Event\WsapiUnregisterEvent instance.
      */
-    const XCDR_UNREGISTER = 'cisco_wsapi.xcdr.unregister';
+    const WSAPI_UNREGISTER = 'cisco_wsapi.unregister.event';
 
     /**
      * The XCDR_RECORD event occurs when an NotifyXcdrRecord is recieved for the cisco wsapi.
@@ -48,6 +48,6 @@ final class WsapiEvents
      * This event allows you take actions in your app based on the status type.
      * Receives an Invite\Bundle\Cisco\WsapiBundle\Event\XcdrRecordEvent instance.
      */
-    const XCDR_RECORD = 'cisco_wsapi.xcdr.record';
+    const XCDR_RECORD = 'cisco_wsapi.xcdr.record.event';
 
 }

@@ -39,4 +39,4 @@ services:
 
     cisco_wsapi.xcdr_listener:
         class:                  "%cisco_wsapi.xcdr_listener.class%"
-        arguments:              ["@event_dispatcher", "@logger"]
+        arguments:              ["@event_dispatcher", "@cisco_wsapi.cache_manager", "@logger"]
