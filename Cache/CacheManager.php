@@ -83,11 +83,11 @@ class CacheManager
         return false;
     }
 
-    public function checkCacheByRegId($regId, $type)
+    public function checkCacheByRegID($regID, $type)
     {
         if ($this->options['redis_enabled']) {
             if ($this->redis) {
-                $regNS = $type . ':registration:' . $regId;
+                $regNS = $type . ':registration:' . $regID;
                 if ($this->redis->exists($regNS)) {
                     $host = $this->redis->get($regNS);
                     $hostNS = $type . ':host:' . $host;
@@ -130,11 +130,11 @@ class CacheManager
         return false;
     }
 
-    public function getCacheByRegId($regId, $type)
+    public function getCacheByRegID($regID, $type)
     {
         if ($this->options['redis_enabled']) {
             if ($this->redis) {
-                $regNS = $type . ':registration:' . $regId;
+                $regNS = $type . ':registration:' . $regID;
                 if ($this->redis->exists($regNS)) {
                     $host = $this->redis->get($regNS);
                     $hostNS = $type . ':host:' . $host;
@@ -216,11 +216,11 @@ class CacheManager
         return false;
     }
 
-    public function deleteCacheByRegId($regId, $type)
+    public function deleteCacheByRegID($regID, $type)
     {
         if ($this->options['redis_enabled']) {
             if ($this->redis) {
-                $regNS = $type . ':registration:' . $regId;
+                $regNS = $type . ':registration:' . $regID;
                 if ($this->redis->exists($regNS)) {
                     $host = $this->redis->get($regNS);
                     $hostNS = $type . ':host:' . $host;

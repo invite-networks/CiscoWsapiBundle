@@ -69,9 +69,9 @@ abstract class WsapiListener implements XcdrListenerInterface
         );
 
         if ($probingRequest->isValid()) {
-            $regId = $probingRequest->getRegistrationID();
+            $regID = $probingRequest->getRegistrationID();
             $options = $probingRequest->getOptions();
-            $cache = $this->cm->getCacheByRegId($regId);
+            $cache = $this->cm->getCacheByRegID($regID);
             if ($cache) {
                 $cache['ttl'] = $probingRequest->getInterval() + 5;
                 $this->cm->setCache($cache, $options);
