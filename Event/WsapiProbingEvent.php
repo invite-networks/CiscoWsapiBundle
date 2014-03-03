@@ -11,93 +11,27 @@
 namespace Invite\Bundle\Cisco\WsapiBundle\Event;
 
 use Symfony\Component\EventDispatcher\Event;
+use Invite\Component\Cisco\Wsapi\Request\WsapiRequestInterface;
 
 class WsapiProbingEvent extends Event
 {
 
     /**
-     * @var array orginal probe data
+     * @var \Invite\Component\Cisco\Wsapi\Request\WsapiRequestInterface
      */
-    protected $probeRequest = array();
+    protected $probingRequest;
 
-    /**
-     * @var mixed prob response to provider
-     */
-    protected $probeResponse;
-
-    /**
-     * @var string probe type: xcc, xsvc or xcdr
-     */
-    protected $type;
-
-    public function __construct($probeRequest, $type)
+    public function __construct(WsapiRequestInterface $probingRequest)
     {
-        $this->probeRequest = $probeRequest;
-        $this->type = $type;
+        $this->probingRequest = $probingRequest;
     }
 
     /**
      * @return array
      */
-    public function getProbeType()
+    public function getProbingRequest()
     {
-        return $this->type;
-    }
-
-    /**
-     * @return std Object
-     */
-    public function getMsgHeader()
-    {
-        return $this->probeRequest['msgHeader'];
-    }
-
-    /**
-     * @return string
-     */
-    public function getTranactionId()
-    {
-        return $this->probeRequest['msgHeader']->tranactionID;
-    }
-
-    /**
-     * @return string
-     */
-    public function getRegistrationId()
-    {
-        return $this->probeRequest['msgHeader']->registrationID;
-    }
-
-    /**
-     * @return string
-     */
-    public function getApplicationData()
-    {
-        return $this->statusRequest['applicationData'];
-    }
-
-    /**
-     * @return string
-     */
-    public function getProviderStatus()
-    {
-        return $this->statusRequest['providerStatus'];
-    }
-
-    /**
-     * @return array
-     */
-    public function getProbeRequest()
-    {
-        return $this->probeRequest;
-    }
-
-    /**
-     * @param array Probing response data
-     */
-    public function setProbeResponse($probeResponse)
-    {
-        $this->probeResponse = $probeResponse;
+        return $this->probingRequest;
     }
 
 }

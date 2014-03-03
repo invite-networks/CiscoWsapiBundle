@@ -59,14 +59,14 @@ class CacheManager
         $this->memcache = $memcache;
     }
 
-    public function checkCache($host, $type)
+    public function checkCacheByHost($host, $type)
     {
         if ($this->options['redis_enabled']) {
             if ($this->redis) {
-                $ns = $type . ':registration:' . $host;
-                if ($this->redis->exists($ns)) {
-                    if ($this->redis->hexists($ns, 'reg.id')) {
-                        $status = $this->redis->hget($ns, 'status');
+                $hostNS = $type . ':host:' . $host;
+                if ($this->redis->exists($hostNS)) {
+                    if ($this->redis->hexists($hostNS, 'reg.id')) {
+                        $status = $this->redis->hget($hostNS, 'status');
                         if ($status === 'IN_SERVICE') {
                             return true;
                         }
@@ -78,91 +78,144 @@ class CacheManager
                 throw new LogicException($msg . get_class($this));
             }
         }
-        if ($this->options['memcache_enabled']) {
-            // TODO finish memcache logic
-        }
+        // TODO finish memcache logic
 
-        // TODO write to disk cache?
         return false;
     }
 
-    public function getCache($host, $type)
+    public function checkCacheByRegId($regId, $type)
     {
         if ($this->options['redis_enabled']) {
             if ($this->redis) {
-                $ns = $type . ':registration:' . $host;
-                if ($this->redis->exists($ns)) {
-                    return $this->redis->hgetall($ns);
-                }
-            } else {
-                $msg = 'Redis service enabled but no service provided. ';
-                $this->logger->emergency($msg . get_class($this));
-                throw new LogicException($msg . get_class($this));
-            }
-        }
-        if ($this->options['memcache_enabled']) {
-            // TODO finish memcache logic
-        }
-
-        // TODO write to disk cache?
-        return false;
-    }
-
-    public function setCache($host, $route, $result, $type, $tId = null, $ttl = 130, $extras = array())
-    {
-        $msgHdr = $result['msgHeader'];
-
-        if ($tId) {
-            if ($tId !== $msgHdr->transactionID) {
-                $msg = 'Redis service enabled but no service provided. ';
-                $this->logger->alert($msg . get_class($this));
-                return array(
-                    'status' => 'error',
-                    'type' => 'cache',
-                    'message' => $msg,
-                    'class' => get_class($this)
-                );
-            }
-        }
-
-        if ($this->options['redis_enabled']) {
-            if ($this->redis) {
-                $ns = $type . ':registration:' . $host;
-                $this->redis->hmset($ns, array(
-                    'app.route' => $route,
-                    'reg.id' => $msgHdr->registrationID,
-                    'status' => $result['providerStatus']
-                ));
-                if (count($extras) > 0) {
-                    foreach ($extras as $k => $v) {
-                        $this->redis->hset($ns, $k, $v);
+                $regNS = $type . ':registration:' . $regId;
+                if ($this->redis->exists($regNS)) {
+                    $host = $this->redis->get($regNS);
+                    $hostNS = $type . ':host:' . $host;
+                    if ($this->redis->exists($hostNS)) {
+                        if ($this->redis->hexists($hostNS, 'reg.id')) {
+                            $status = $this->redis->hget($hostNS, 'status');
+                            if ($status === 'IN_SERVICE') {
+                                return true;
+                            }
+                        }
                     }
                 }
-                $this->redis->expire($ns, $ttl);
             } else {
                 $msg = 'Redis service enabled but no service provided. ';
                 $this->logger->emergency($msg . get_class($this));
                 throw new LogicException($msg . get_class($this));
             }
         }
-        if ($this->options['memcache_enabled']) {
-            // TODO finish memcache logic
-        }
+        // TODO finish memcache logic
 
-        // TODO write to disk cache?
+        return false;
+    }
+
+    public function getCacheByHost($host, $type)
+    {
+        if ($this->options['redis_enabled']) {
+            if ($this->redis) {
+                $hostNS = $type . ':host:' . $host;
+                if ($this->redis->exists($hostNS)) {
+                    return $this->redis->hgetall($hostNS);
+                }
+            } else {
+                $msg = 'Redis service enabled but no service provided. ';
+                $this->logger->emergency($msg . get_class($this));
+                throw new LogicException($msg . get_class($this));
+            }
+        }
+        // TODO finish memcache logic
+
+        return false;
+    }
+
+    public function getCacheByRegId($regId, $type)
+    {
+        if ($this->options['redis_enabled']) {
+            if ($this->redis) {
+                $regNS = $type . ':registration:' . $regId;
+                if ($this->redis->exists($regNS)) {
+                    $host = $this->redis->get($regNS);
+                    $hostNS = $type . ':host:' . $host;
+                    if ($this->redis->exists($hostNS)) {
+                        return $this->redis->hgetall($hostNS);
+                    }
+                }
+            } else {
+                $msg = 'Redis service enabled but no service provided. ';
+                $this->logger->emergency($msg . get_class($this));
+                throw new LogicException($msg . get_class($this));
+            }
+        }
+        // TODO finish memcache logic
+
+        return false;
+    }
+
+    public function setCache(array$data, array$options = array())
+    {
+        if ($this->options['redis_enabled']) {
+            if ($this->redis) {
+                $hostNS = $data['type'] . ':host:' . $data['host'];
+                $this->redis->hmset($hostNS, array(
+                    'app.name' => $data['app_name'],
+                    'app.url' => $data['app_url'],
+                    'reg.id' => $data['reg_id'],
+                    'provider.url' => $data['provider_url'],
+                    'status' => $data['status']
+                ));
+                if (count($options) > 0) {
+                    foreach ($options as $k => $v) {
+                        $this->redis->hset($hostNS, $k, $v);
+                    }
+                }
+                $regNS = $data['type'] . ':registration:' . $data['registrationId'];
+                $this->redis->set($regNS, $data['host']);
+                $ttl = array_key_exists('ttl', $data) ? $data['ttl'] : 130;
+                $this->redis->expire($regNS, $ttl);
+                $this->redis->expire($hostNS, $ttl);
+            } else {
+                $msg = 'Redis service enabled but no service provided. ';
+                $this->logger->emergency($msg . get_class($this));
+                throw new LogicException($msg . get_class($this));
+            }
+        }
+        // TODO finish memcache logic
+
         return array(
             'status' => 'success',
-            'message' => 'Cache was successfully set for host ' . $host
+            'message' => 'Cache was successfully set for host ' . $data['host']
         );
     }
 
-    public function deleteCache($host, $type)
+    public function deleteCacheByHost($host, $type)
     {
         if ($this->options['redis_enabled']) {
             if ($this->redis) {
-                $ns = $type . ':registration:' . $host;
-                if ($this->redis->exists($ns)) {
-                    $this->redis->del($ns);
+                $hostNS = $type . ':host:' . $host;
+                $this->redis->del($hostNS);
+                return true;
+            } else {
+                $msg = 'Redis service enabled but no service provided. ';
+                $this->logger->emergency($msg . get_class($this));
+                throw new LogicException($msg . get_class($this));
+            }
+        }
+        // TODO finish memcache logic
+
+        return false;
+    }
+
+    public function deleteCacheByRegId($regId, $type)
+    {
+        if ($this->options['redis_enabled']) {
+            if ($this->redis) {
+                $regNS = $type . ':registration:' . $regId;
+                if ($this->redis->exists($regNS)) {
+                    $host = $this->redis->get($regNS);
+                    $hostNS = $type . ':host:' . $host;
+                    $this->redis->del($regNS, $hostNS);
                     return true;
                 }
             } else {
@@ -171,11 +224,8 @@ class CacheManager
                 throw new LogicException($msg . get_class($this));
             }
         }
-        if ($this->options['memcache_enabled']) {
-            // TODO finish memcache logic
-        }
+        // TODO finish memcache logic
 
-        // TODO write to disk cache?
         return false;
     }
 

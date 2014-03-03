@@ -30,9 +30,9 @@ class XcdrListener extends WsapiListener implements XcdrListenerInterface
      * 
      * @param array $data Must be md array with csv key.
      */
-    public function processCdrRecord(XcdrRequest $cdrRequest)
+    public function processRecord(XcdrRequest $recordRequest)
     {
-        $recordEvent = new XcdrRecordEvent($cdrRequest);
+        $recordEvent = new XcdrRecordEvent($recordRequest);
         $this->dispatcher->dispatch(
                 WsapiEvents::XCDR_RECORD, $recordEvent
         );

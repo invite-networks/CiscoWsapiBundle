@@ -11,37 +11,19 @@
 namespace Invite\Bundle\Cisco\WsapiBundle\Event;
 
 use Symfony\Component\EventDispatcher\Event;
+use Invite\Component\Cisco\Wsapi\Request\WsapiRequestInterface;
 
 class WsapiStatusEvent extends Event
 {
 
     /**
-     * @var array orginal status data
+     * @var \Invite\Component\Cisco\Wsapi\Request\WsapiRequestInterface
      */
-    protected $statusRequest = array();
+    protected $statusRequest;
 
-    /**
-     * @var mixed status response to provider
-     */
-    protected $statusResponse;
-
-    /**
-     * @var string probe type: xcc, xsvc or xcdr
-     */
-    protected $type;
-
-    public function __construct($statusRequest, $type)
+    public function __construct(WsapiRequestInterface $statusRequest)
     {
         $this->statusRequest = $statusRequest;
-        $this->type = $type;
-    }
-
-    /**
-     * @return string
-     */
-    public function getStatusType()
-    {
-        return $this->type;
     }
 
     /**
@@ -50,14 +32,6 @@ class WsapiStatusEvent extends Event
     public function getStatusRequest()
     {
         return $this->statusRequest;
-    }
-
-    /**
-     * @param mixed Status response data
-     */
-    public function setStatusResponse($statusResponse)
-    {
-        $this->statusResponse = $statusResponse;
     }
 
 }

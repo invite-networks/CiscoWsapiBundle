@@ -11,6 +11,7 @@
 namespace Invite\Bundle\Cisco\WsapiBundle\Controller;
 
 use Symfony\Component\DependencyInjection\ContainerAware;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -40,17 +41,24 @@ class WsapiController extends ContainerAware
     /**
      * Xcdr Soap Webservice action.
      */
-    public function xcdrAction()
+    public function xcdrAction(Request $request)
     {
-        $xcdrServer = $this->container->get('cisco_wsapi.xcdr_server');
+        $wsapiServer = $this->container->get('cisco_wsapi.server');
+        $listener = $this->container->get('cisco_wsapi.xcdr_listener');
+
+        $options = array(
+            'host' => $request->getClientIP(),
+            'route' => $request->getUri(),
+            'customer' => 'stevens-henegar-college' // How do i get this?
+        );
+
         $response = new Response();
         $response->headers->set('Content-Type', 'application/soap+xml');
-        $result = $xcdrServer->processXcdr();
+        $result = $wsapiServer->processXcdr($listener, $options);
 
         if ($result['status'] === 'error') {
             $response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE);
             $response->setContent($result['message']);
-            $host = $this->container->get('request')->getClientIp();
             $logger = $this->container->get('logger');
             $logger->alert($host . ' : ' . $result['message'] . ' : ' . $result['class']);
         } else {

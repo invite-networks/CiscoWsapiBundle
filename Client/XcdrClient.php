@@ -64,7 +64,7 @@ class XcdrClient
 
     public function register($host, $extras = array(), $url = null)
     {
-        if ($this->cm->checkCache($host, 'xcdr')) {
+        if ($this->cm->checkCacheByHost($host, 'xcdr')) {
             $msg = $host . ' is already registered with XCDR Provider ';
             return array(
                 'status' => 'success',
@@ -89,8 +89,8 @@ class XcdrClient
         }
 
         $xcdrClient = new BaseXcdrClient();
-        $tId = uniqid('xcdr');
-        $this->options['transactionId'] = $tId;
+        $this->options['transactionId'] = uniqid('xcdr');
+
         $result = $xcdrClient->requestXcdrRegister($host, $route, $this->options);
 
         if ($result['status'] === 'error') {
@@ -98,7 +98,14 @@ class XcdrClient
             return $result;
         }
 
-        $cache = $this->cm->setCache($host, $route, $result['result'], 'xcdr', $tId, $extras);
+        $data = $result['result'];
+        $data['host'] = $host;
+        $data['reg_id'] = $data['msgHeader']->registrationID;
+        $data['tran_id'] = $data['msgHeader']->transactionID;
+        $data['status'] = $data['providerStatus'];
+        $data['type'] = 'xcdr';
+
+        $cache = $this->cm->setCache($data, $extras);
 
         if ($cache['status'] === 'error') {
             // Already logged in CacheManager
@@ -108,7 +115,7 @@ class XcdrClient
         return array(
             'status' => 'success',
             'message' => $host . ' registered successfully!',
-            'result' => $result
+            'result' => $data
         );
     }
 

@@ -11,23 +11,27 @@
 namespace Invite\Bundle\Cisco\WsapiBundle\Event;
 
 use Symfony\Component\EventDispatcher\Event;
+use Invite\Component\Cisco\Wsapi\Request\WsapiRequestInterface;
 
-class XcdrUnregisterEvent extends Event
+class WsapiUnregisterEvent extends Event
 {
 
-    private $data;
+    /**
+     * @var \Invite\Component\Cisco\Wsapi\Request\WsapiRequestInterface
+     */
+    protected $unregisterRequest;
 
-    public function __construct(array$data)
+    public function __construct(WsapiRequestInterface $unregisterRequest)
     {
-        $this->data = $data;
+        $this->unregisterRequest = $unregisterRequest;
     }
 
     /**
      * @return array
      */
-    public function getData()
+    public function getUnregisterRequest()
     {
-        return $this->data;
+        return $this->unregisterRequest;
     }
 
 }

@@ -11,23 +11,27 @@
 namespace Invite\Bundle\Cisco\WsapiBundle\Event;
 
 use Symfony\Component\EventDispatcher\Event;
+use Invite\Component\Cisco\Wsapi\Request\XcdrRequest;
 
 class XcdrRecordEvent extends Event
 {
 
-    private $data;
+    /**
+     * @var \Invite\Component\Cisco\Wsapi\Request\XcdrRequest
+     */
+    protected $recordRequest;
 
-    public function __construct(array$data)
+    public function __construct(XcdrRequest $recordRequest)
     {
-        $this->data = $data;
+        $this->recordRequest = $recordRequest;
     }
 
     /**
      * @return array
      */
-    public function getData()
+    public function getRecordRequest()
     {
-        return $this->data;
+        return $this->recordRequest;
     }
 
 }

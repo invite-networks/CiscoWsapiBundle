@@ -20,9 +20,9 @@ use Invite\Bundle\Cisco\WsapiBundle\Cache\CacheManager;
 use Invite\Component\Cisco\Wsapi\Request\WsapiRequestInterface;
 
 /**
- * XcdrListener service
+ * WsapiListener abstract class
  * 
- * Listens for Xcdr api events from wsapi library and
+ * Listens for Wsapi events from wsapi library and
  * sets the appropriate Symfony event.
  */
 abstract class WsapiListener
@@ -67,14 +67,8 @@ abstract class WsapiListener
                 WsapiEvents::WSAPI_PROBING, $probingEvent
         );
 
-        $response = $probingEvent->getProbingResponse();
-
-        if (!is_array($response) && $response === false) {
-            
-        }
-
-        if (count($response) > 0) {
-            
+        if ($probingRequest->isValid()) {
+            $this->cm->setCache($probingRequest);
         }
     }
 
