@@ -100,8 +100,8 @@ class XcdrClient
 
         $data = $result['result'];
         $data['host'] = $host;
-        $data['reg.id'] = $data['msgHeader']->registrationID;
-        $data['tran.id'] = $data['msgHeader']->transactionID;
+        $data['registration.id'] = $data['msgHeader']->registrationID;
+        $data['transaction.id'] = $data['msgHeader']->transactionID;
         $data['status'] = $data['providerStatus'];
         $data['type'] = 'xcdr';
 

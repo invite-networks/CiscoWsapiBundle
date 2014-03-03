@@ -65,7 +65,7 @@ class CacheManager
             if ($this->redis) {
                 $hostNS = $type . ':host:' . $host;
                 if ($this->redis->exists($hostNS)) {
-                    if ($this->redis->hexists($hostNS, 'reg.id')) {
+                    if ($this->redis->hexists($hostNS, 'registration.id')) {
                         $status = $this->redis->hget($hostNS, 'status');
                         if ($status === 'IN_SERVICE') {
                             return true;
@@ -92,7 +92,7 @@ class CacheManager
                     $host = $this->redis->get($regNS);
                     $hostNS = $type . ':host:' . $host;
                     if ($this->redis->exists($hostNS)) {
-                        if ($this->redis->hexists($hostNS, 'reg.id')) {
+                        if ($this->redis->hexists($hostNS, 'registration.id')) {
                             $status = $this->redis->hget($hostNS, 'status');
                             if ($status === 'IN_SERVICE') {
                                 return true;
@@ -163,18 +163,23 @@ class CacheManager
                     'host' => $data['host'],
                     'app.name' => $data['app.name'],
                     'app.url' => $data['app.url'],
-                    'reg.id' => $data['reg.id'],
+                    'reg.id' => $data['registration.id'],
                     'provider.url' => $data['provider.url'],
                     'ttl' => $ttl,
                     'type' => $data['type'],
                     'status' => $data['status']
                 ));
+                if (array_key_exists('transaction.id', $data)) {
+                    $this->redis->hset($hostNS
+                            , 'transaction.id'
+                            , $data['transaction.id']);
+                }
                 if (count($options) > 0) {
                     foreach ($options as $k => $v) {
                         $this->redis->hset($hostNS, $k, $v);
                     }
                 }
-                $regNS = $data['type'] . ':registration:' . $data['reg.id'];
+                $regNS = $data['type'] . ':registration:' . $data['registration.id'];
                 $this->redis->set($regNS, $data['host']);
 
                 $this->redis->expire($regNS, $ttl);

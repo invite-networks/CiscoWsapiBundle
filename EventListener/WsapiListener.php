@@ -69,7 +69,7 @@ abstract class WsapiListener implements XcdrListenerInterface
         );
 
         if ($probingRequest->isValid()) {
-            $regId = $probingRequest->getregistrationID();
+            $regId = $probingRequest->getRegistrationID();
             $options = $probingRequest->getOptions();
             $cache = $this->cm->getCacheByRegId($regId);
             if ($cache) {
