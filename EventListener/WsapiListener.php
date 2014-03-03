@@ -68,7 +68,13 @@ abstract class WsapiListener
         );
 
         if ($probingRequest->isValid()) {
-            $this->cm->setCache($probingRequest);
+            $regId = $probingRequest->getRegistrationId();
+            $options = $probingRequest->getOptions();
+            $cache = $this->cm->getCacheByRegId($regId);
+            if ($cache) {
+                $cache['ttl'] = $this->cm->getInterval() + 5;
+                $this->cm->setCache($cache, $options);
+            }
         }
     }
 

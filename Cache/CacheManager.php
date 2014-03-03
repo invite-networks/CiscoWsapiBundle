@@ -157,12 +157,16 @@ class CacheManager
     {
         if ($this->options['redis_enabled']) {
             if ($this->redis) {
+                $ttl = array_key_exists('ttl', $data) ? $data['ttl'] : 130;
                 $hostNS = $data['type'] . ':host:' . $data['host'];
                 $this->redis->hmset($hostNS, array(
-                    'app.name' => $data['app_name'],
-                    'app.url' => $data['app_url'],
-                    'reg.id' => $data['reg_id'],
-                    'provider.url' => $data['provider_url'],
+                    'host' => $data['host'],
+                    'app.name' => $data['app.name'],
+                    'app.url' => $data['app.url'],
+                    'reg.id' => $data['reg.id'],
+                    'provider.url' => $data['provider.url'],
+                    'ttl' => $ttl,
+                    'type' => $data['type'],
                     'status' => $data['status']
                 ));
                 if (count($options) > 0) {
@@ -170,9 +174,9 @@ class CacheManager
                         $this->redis->hset($hostNS, $k, $v);
                     }
                 }
-                $regNS = $data['type'] . ':registration:' . $data['registrationId'];
+                $regNS = $data['type'] . ':registration:' . $data['reg.id'];
                 $this->redis->set($regNS, $data['host']);
-                $ttl = array_key_exists('ttl', $data) ? $data['ttl'] : 130;
+
                 $this->redis->expire($regNS, $ttl);
                 $this->redis->expire($hostNS, $ttl);
             } else {
